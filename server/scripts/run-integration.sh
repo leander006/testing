@@ -1,5 +1,5 @@
 docker-compose up -d
-npm run install
+npm install
 npm run build
 npm run generate
 npx prisma migrate dev --name init
