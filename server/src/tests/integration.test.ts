@@ -71,7 +71,7 @@ describe('Server test cases', () => {
                     .set('Authorization', `Bearer ${token}`)
                     .send({ title: 'test post', url: 'test url' });
 
-                expect(response.status).toBe(200);
+                expect(response.status).toBe(201);
                 expect(response.body.message).toBe('Post created successfully');
             });
         
