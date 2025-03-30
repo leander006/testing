@@ -30,5 +30,8 @@ jobs:
     - name: Copy .env.example to .env
       run: cp ./server/.env.example ./server/.env
 
+    - name : Install all dependencies
+      run: cd server && npm install -- force
+
     - name: Run integration script
       run: cd server && npm run test:integration
