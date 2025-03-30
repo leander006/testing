@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addDummyData = void 0;
+exports.addDummyData = addDummyData;
 const db_1 = require("../config/db");
 function addDummyData() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -42,4 +42,3 @@ function addDummyData() {
         }
     });
 }
-exports.addDummyData = addDummyData;
