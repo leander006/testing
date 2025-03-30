@@ -32,7 +32,6 @@ describe('Server test cases', () => {
                 expect(response.body.error).toBe('Username already taken');
             });
         })
-        
         describe('Login test cases', () => {
                 it('should login user successfully', async() => {
                     const response = await request(app).get('/api/user').send({ username: 'testuser', password: 'testpassword' });
