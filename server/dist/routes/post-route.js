@@ -12,5 +12,5 @@ router.post('/', authenticate_1.authenticate, post_controller_1.createPost);
 // Route to get all posts
 router.get('/', post_controller_1.getAllPosts);
 // Route to delete a post by ID
-router.delete('/:id', post_controller_1.deletePostById);
+router.delete('/:id', authenticate_1.authenticate, post_controller_1.deletePostById);
 exports.default = router;

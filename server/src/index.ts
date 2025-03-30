@@ -1,32 +1,17 @@
 import express from 'express';
-
-export const app = express();
 import userRoute from './routes/user-route';
 import postRoute from './routes/post-route';
-const passport = require("passport");
-const { passportAuth } = require("./config/jwt");
-const session = require("cookie-session");
-const cors = require("cors");
-app.use(express.json());
-const {
-    JWT_SECRET
-  } = require("./config/server-config");
+import passport from "passport";
+import { passportAuth } from "./config/jwt";
+import session from "cookie-session";
+import { JWT_SECRET } from "./config/server-config";
 
-app.use(
-    cors({
-      origin: [URL, "http://localhost:3000"],
-      methods: ["GET", "POST", "DELETE", "PUT"],
-      credentials: true,
-    })
-  );
-  
-  app.use(
-    session({
-      secret: `${JWT_SECRET}`,
-      resave: false,
-      saveUninitialized: true,
-    })
-  );
+export const app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.use( session({ secret: `${JWT_SECRET}`}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 passportAuth(passport);

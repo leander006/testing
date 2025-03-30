@@ -8,15 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.passportAuth = void 0;
 const db_1 = require("./db");
-const JWT = require("passport-jwt");
-const { JWT_SECRET } = require("./server-config");
-const JwtStrategy = JWT.Strategy;
-const ExtractJwt = JWT.ExtractJwt;
+const passport_jwt_1 = __importDefault(require("passport-jwt"));
+const server_config_1 = require("./server-config");
+const JwtStrategy = passport_jwt_1.default.Strategy;
+const ExtractJwt = passport_jwt_1.default.ExtractJwt;
 const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: JWT_SECRET,
+    secretOrKey: server_config_1.JWT_SECRET,
 };
 const passportAuth = (passport) => __awaiter(void 0, void 0, void 0, function* () {
     passport.use(new JwtStrategy(opts, (jwt_payload, done) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,4 +33,4 @@ const passportAuth = (passport) => __awaiter(void 0, void 0, void 0, function* (
         }
     })));
 });
-module.exports = { passportAuth };
+exports.passportAuth = passportAuth;

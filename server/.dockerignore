@@ -1,0 +1,25 @@
+# # Node.js specific
+# node_modules
+# npm-debug.log
+# yarn-error.log
+
+# # Docker-specific
+# .dockerignore
+# Dockerfile
+
+# # Git-related
+# .git
+# .gitignore
+
+# # Environment variables
+# .env
+
+# # Logs and temporary files
+# *.log
+# *.tmp
+# *.swp
+
+# # IDE/editor files
+# .vscode/
+# .idea/
+# .DS_Store

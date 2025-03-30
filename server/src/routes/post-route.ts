@@ -10,6 +10,6 @@ router.post('/', authenticate,createPost);
 router.get('/', getAllPosts);
 
 // Route to delete a post by ID
-router.delete('/:id', deletePostById);
+router.delete('/:id', authenticate,deletePostById);
 
 export default router;

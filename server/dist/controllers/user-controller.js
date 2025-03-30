@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.login = exports.register = void 0;
 const zod_1 = require("zod");
-const { JWT_SECRET } = require("../config/server-config");
+const server_config_1 = require("../config/server-config");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../config/db");
@@ -25,13 +25,10 @@ const userSchema = zod_1.z.object({
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const validatedData = userSchema.parse(req.body);
-        if (!validatedData) {
-            return res.status(400).json({ error: 'Invalid data' });
-        }
         // Check if user already exists
         const existingUser = yield db_1.prismaClient.user.findFirst({ where: { username: validatedData.username } });
         if (existingUser) {
-            return res.status(400).json({ error: 'Username already taken' });
+            return res.status(401).json({ error: 'Username already taken' });
         }
         // Hash the password
         const hashedPassword = yield bcrypt_1.default.hash(validatedData.password, 10);
@@ -52,18 +49,18 @@ exports.register = register;
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const validatedData = userSchema.parse(req.body);
-        if (!validatedData) {
-            return res.status(400).json({ error: 'Invalid data' });
-        }
         const user = yield db_1.prismaClient.user.findFirst({ where: { username: validatedData.username } });
         if (!user) {
-            return res.status(400).json({ error: 'Invalid username or password' });
+            return res.status(401).json({ error: 'Invalid username or password' });
         }
         const isPasswordValid = yield bcrypt_1.default.compare(validatedData.password, user.password);
         if (!isPasswordValid) {
-            return res.status(400).json({ error: 'Invalid username or password' });
+            return res.status(402).json({ error: 'Invalid username or password' });
         }
-        const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+        if (!server_config_1.JWT_SECRET) {
+            throw new Error('JWT_SECRET is not defined');
+        }
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, server_config_1.JWT_SECRET, { expiresIn: '1h' });
         res.status(200).json({ message: 'Login successful', token });
     }
     catch (error) {

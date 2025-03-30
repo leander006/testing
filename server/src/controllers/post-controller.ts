@@ -17,9 +17,6 @@ const deletePostSchema = z.object({
 export const createPost = async (req: Request, res: Response) : Promise<any> => {
     try {
         const validatedData = createPostSchema.parse(req.body);
-        if(!validatedData) {
-            return res.status(400).json({ error: 'Invalid data' });
-        }
         const user = req.user as { id: number } ;
         const post = await prismaClient.post.create({
             data: {
@@ -27,13 +24,11 @@ export const createPost = async (req: Request, res: Response) : Promise<any> => 
                 Url: validatedData.url,
                 authorId: user?.id
             }
-        })
-        res.status(201).json(post);
+        })        
+        return res.status(201).json({ message: 'Post created successfully', post });
     } catch (error) {
-        if (error instanceof z.ZodError) {
-            return res.status(400).json({ errors: error.errors });
-        }
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.log(error);
+       return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
@@ -48,11 +43,9 @@ export const getAllPosts = async (_req: Request, res: Response) => {
 };
 
 export const deletePostById = async (req: Request, res: Response) : Promise<any> => {
-    const validatedData  = deletePostSchema.parse({ id: parseInt(req.params.id) });
-    if(!validatedData) {
-        return res.status(400).json({ error: 'Invalid data' });
-    }
     try {
+        const validatedData  = deletePostSchema.parse({ id: parseInt(req.params.id) });
+
         await prismaClient.post.delete({
             where: { id:validatedData.id } });
         res.status(200).json("deleted the post");

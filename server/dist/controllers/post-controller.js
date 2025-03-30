@@ -22,9 +22,6 @@ const deletePostSchema = zod_1.z.object({
 const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const validatedData = createPostSchema.parse(req.body);
-        if (!validatedData) {
-            return res.status(400).json({ error: 'Invalid data' });
-        }
         const user = req.user;
         const post = yield db_1.prismaClient.post.create({
             data: {
@@ -33,13 +30,11 @@ const createPost = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
                 authorId: user === null || user === void 0 ? void 0 : user.id
             }
         });
-        res.status(201).json(post);
+        return res.status(201).json({ message: 'Post created successfully', post });
     }
     catch (error) {
-        if (error instanceof zod_1.z.ZodError) {
-            return res.status(400).json({ errors: error.errors });
-        }
-        res.status(500).json({ error: 'Internal Server Error' });
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 });
 exports.createPost = createPost;
@@ -54,11 +49,8 @@ const getAllPosts = (_req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getAllPosts = getAllPosts;
 const deletePostById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const validatedData = deletePostSchema.parse({ id: parseInt(req.params.id) });
-    if (!validatedData) {
-        return res.status(400).json({ error: 'Invalid data' });
-    }
     try {
+        const validatedData = deletePostSchema.parse({ id: parseInt(req.params.id) });
         yield db_1.prismaClient.post.delete({
             where: { id: validatedData.id }
         });
