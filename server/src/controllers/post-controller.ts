@@ -27,7 +27,6 @@ export const createPost = async (req: Request, res: Response) : Promise<any> => 
         })        
         return res.status(201).json({ message: 'Post created successfully', post });
     } catch (error) {
-        console.log(error);
        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
